@@ -163,9 +163,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Player.cpp" />
+    <ClCompile Include="Actor\Tail.cpp" />
+    <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Player.h" />
+    <ClInclude Include="Actor\Tail.h" />
     <ClInclude Include="Game\Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
