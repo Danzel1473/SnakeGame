@@ -44,12 +44,6 @@ void Engine::Run()
 	int64_t currentTime = time.QuadPart;
 	int64_t previousTime = currentTime;
 
-	// 프레임 제한.
-	//float targetFrameRate = 90.0f;
-
-	// 한 프레임 시간 계산.
-	//float targetOneFrameTime = 1.0f / targetFrameRate;
-
 	// Game-Loop.
 	while (true)
 	{
@@ -60,16 +54,12 @@ void Engine::Run()
 		}
 
 		// 현재 프레임 시간 저장.
-		//time = timeGetTime();
 		QueryPerformanceCounter(&time);
 		currentTime = time.QuadPart;
 
 		// 프레임 시간 계산.
 		float deltaTime = static_cast<float>(currentTime - previousTime) /
 			static_cast<float>(frequency.QuadPart);
-
-		// 한 프레임 시간 계산.
-		//float targetOneFrameTime = 1.0f / targetFrameRate;
 
 		// 프레임 확인.
 		if (deltaTime >= targetOneFrameTime)
@@ -89,13 +79,6 @@ void Engine::Run()
 
 			// 이전 프레임 시간 저장.
 			previousTime = currentTime;
-
-			// 액터 정리 (삭제 요청된 액터들 정리).
-			//if (mainLevel)
-			//{
-			//	//mainLevel->DestroyActor();
-			//	mainLevel->ProcessAddedAndDestroyedActor();
-			//}
 
 			// 프레임 활성화.
 			shouldUpdate = true;

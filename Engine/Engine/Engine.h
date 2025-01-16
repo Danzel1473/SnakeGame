@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Core.h"
+#include "Level/Level.h"
+#include "Actor/Actor.h"
 #include "Math/Vector2.h"
 
 // 입력 처리를 위한 구조체.
