@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Core.h"
-#include "Level/Level.h"
-#include "Actor/Actor.h"
 #include "Math/Vector2.h"
 
 // 입력 처리를 위한 구조체.
@@ -15,15 +13,10 @@ struct KeyState
 	bool wasKeyDown = false;
 };
 
-// 커서의 종류를 설정할 때 사용할 열거형.
-enum class CursorType
-{
-	NoCursor,
-	SolidCursor,
-	NormalCursor
-};
-
-// 엔진 클래스
+// 엔진 클래스.
+class Level;
+class Actor;
+class ScreenBuffer;
 class ENGINE_API Engine
 {
 public:
@@ -33,11 +26,19 @@ public:
 	// 엔진 실행 함수.
 	void Run();
 
+	// 레벨 추가 함수.
+	void LoadLevel(Level* newLevel);
+
+	// 액터 추가/삭제 함수.
+	void AddActor(Actor* newActor);
+	void DestroyActor(Actor* targetActor);
+
 	// 화면 좌표 관련 함수.
 	void SetCursorType(CursorType cursorType);
-	void SetCursorPosition(const Vector2& position);
-	void SetCursorPosition(int x, int y);
 
+	void Draw(const Vector2& position, const char* image, Color color = Color::White);
+
+	// 화면 크기 반환 함수.
 	inline Vector2 ScreenSize() const { return screenSize; }
 
 	// 타겟 프레임 속도 설정 함수.
@@ -55,18 +56,20 @@ public:
 	static Engine& Get();
 
 protected:
-	void InitializeBuffer();			// 버퍼 설정
-	void ProcessInput();				// 입력 처리
+	void ProcessInput();				// 입력 처리.
 	void Update(float deltaTime);		// Tick();
 
-	void Clear();						// 화면 지우기
+	void Clear();						// 화면 지우기.
 	void Draw();						// Render();
+	void Present();
 
 	// 이전 프레임의 키 상태를 저장하는 함수.
 	void SavePreviouseKeyStates();
 
+	inline ScreenBuffer* GetRenderer() const { return renderTargets[currentRenderTargetIndex]; }
+	void ClearImageBuffer();
+
 protected:
-	Vector2 screenSize;
 
 	// 타겟 프레임 변수(초당 프레임).
 	float targetFrameRate = 60.0f;
@@ -83,9 +86,19 @@ protected:
 	// 싱글톤 구현을 위한 전역 변수 선언.
 	static Engine* instance;
 
+	// 메인 레벨 변수.
+	Level* mainLevel;
+
 	// 프레임을 업데이트해야 하는지 여부를 나타내는 변수.
 	bool shouldUpdate = true;
 
+	// 화면 크기.
+	Vector2 screenSize;
+
 	// 화면 지울 때 사용할 버퍼(Buffer/Blob).
-	char* emptyStringBuffer = nullptr;
+	CHAR_INFO* imageBuffer = nullptr;
+
+	// 화면 버퍼.
+	ScreenBuffer* renderTargets[2];
+	int currentRenderTargetIndex = 0;
 };

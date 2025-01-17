@@ -163,15 +163,21 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Pear.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
     <ClCompile Include="Actor\Tail.cpp" />
+    <ClCompile Include="Actor\Wall.cpp" />
     <ClCompile Include="Game\Game.cpp" />
+    <ClCompile Include="Level\GameLevel.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Pear.h" />
     <ClInclude Include="Actor\Player.h" />
     <ClInclude Include="Actor\Tail.h" />
+    <ClInclude Include="Actor\Wall.h" />
     <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Level\GameLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

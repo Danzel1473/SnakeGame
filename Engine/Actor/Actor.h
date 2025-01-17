@@ -10,9 +10,9 @@ class ENGINE_API Actor : public RTTI
 	// RTTI 선언.
 	RTTI_DECLARATIONS(Actor, RTTI)
 
-		// Level 클래스를 friend로 선언.
-		// private에 접근이 가능하도록.
-		friend class Level;
+	// Level 클래스를 friend로 선언.
+	// private에 접근이 가능하도록.
+	friend class Level;
 
 public:
 	Actor();

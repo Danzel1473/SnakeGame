@@ -16,14 +16,22 @@ enum class Color : unsigned short
 	White = Red + Green + Blue,
 };
 
-// 콘솔 색상 설정 함수.
-inline void SetColor(Color color)
+// 커서의 종류를 설정할 때 사용할 열거형.
+enum class CursorType
 {
-	SetConsoleTextAttribute(
-		GetStdHandle(STD_OUTPUT_HANDLE),
-		(int)color
-	);
-}
+	NoCursor,
+	SolidCursor,
+	NormalCursor
+};
+
+// 콘솔 색상 설정 함수.
+//inline void SetColor(Color color)
+//{
+//	SetConsoleTextAttribute(
+//		GetStdHandle(STD_OUTPUT_HANDLE), 
+//		(int)color
+//	);
+//}
 
 // 메모리 삭제 함수.
 template<typename T>
@@ -63,6 +71,7 @@ inline float RandomPercent(float min, float max)
 // 메모리 누수 확인할 때 사용하는 함수.
 inline void CheckMemoryLeak()
 {
+	// https://learn.microsoft.com/ko-kr/cpp/c-runtime-library/find-memory-leaks-using-the-crt-library?view=msvc-170
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 }
 
@@ -100,9 +109,9 @@ inline void CheckMemoryLeak()
 #define VK_CLEAR          0x0C
 #define VK_RETURN         0x0D
 
-  /*
-  * 0x0E - 0x0F : unassigned
-  */
+/*
+* 0x0E - 0x0F : unassigned
+*/
 
 #define VK_SHIFT          0x10
 #define VK_CONTROL        0x11
@@ -144,19 +153,19 @@ inline void CheckMemoryLeak()
 #define VK_DELETE         0x2E
 #define VK_HELP           0x2F
 
-  /*
-  * VK_0 - VK_9 are the same as ASCII '0' - '9' (0x30 - 0x39)
-  * 0x3A - 0x40 : unassigned
-  * VK_A - VK_Z are the same as ASCII 'A' - 'Z' (0x41 - 0x5A)
-  */
+/*
+* VK_0 - VK_9 are the same as ASCII '0' - '9' (0x30 - 0x39)
+* 0x3A - 0x40 : unassigned
+* VK_A - VK_Z are the same as ASCII 'A' - 'Z' (0x41 - 0x5A)
+*/
 
 #define VK_LWIN           0x5B
 #define VK_RWIN           0x5C
 #define VK_APPS           0x5D
 
-  /*
-  * 0x5E : reserved
-  */
+/*
+* 0x5E : reserved
+*/
 
 #define VK_SLEEP          0x5F
 
@@ -192,6 +201,15 @@ inline void CheckMemoryLeak()
 #define VK_NUMLOCK        0x90
 #define VK_SCROLL         0x91
 
+/*
+* 0x97 - 0x9F : unassigned
+*/
+
+/*
+* VK_L* & VK_R* - left and right Alt, Ctrl and Shift virtual keys.
+* Used only as parameters to GetAsyncKeyState() and GetKeyState().
+* No other API or message will distinguish left and right keys in this way.
+*/
 #define VK_LSHIFT         0xA0
 #define VK_RSHIFT         0xA1
 #define VK_LCONTROL       0xA2

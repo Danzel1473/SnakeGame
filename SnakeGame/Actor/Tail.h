@@ -3,6 +3,8 @@
 
 class Tail : public DrawableActor
 {
+	RTTI_DECLARATIONS(Tail, DrawableActor)
+
 public:
 	Tail(Vector2* position);
 	void SetPosition(Vector2* position);
