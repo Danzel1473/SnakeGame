@@ -3,24 +3,7 @@
 
 GameLevel::GameLevel()
 {
-    const char* mapString =
-        "忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "弛                                      弛\n"
-        "戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎";
+    const char* mapString = "仃";
 
     for (int i = 0; i < strlen(mapString); i++)
     {
@@ -37,10 +20,14 @@ GameLevel::GameLevel()
             y++;
             continue;
         }
+        char a = mapString[i];
+        const char* mapChar = new char(a);
 
-        Wall* wall = new Wall(Vector2(x, y), (const char*)mapString[i]);
+        Wall* wall = new Wall(Vector2(x, y), mapChar);
         walls.push_back(wall);
         x++;
+
+        delete mapChar;
     }
 
 }
