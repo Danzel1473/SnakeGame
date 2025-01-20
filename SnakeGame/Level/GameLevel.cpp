@@ -3,31 +3,30 @@
 
 GameLevel::GameLevel()
 {
-    const char* mapString = "¤±";
+    const char* mapString = "1111111111111\n1           1\n1           1\n1           1\n1           1\n1111111111111";
 
     for (int i = 0; i < strlen(mapString); i++)
     {
         static int x = 0;
         static int y = 0;
-        if (mapString[i] == ' ')
-        {
-            x++;
-            continue;
-        }
 
         if (mapString[i] == '\n')
         {
             y++;
+            x = 0;
             continue;
         }
-        char a = mapString[i];
-        const char* mapChar = new char(a);
 
-        Wall* wall = new Wall(Vector2(x, y), mapChar);
-        walls.push_back(wall);
+        if (mapString[i] == '1')
+        {
+            Wall* wall = new Wall(Vector2(y, x));
+            walls.push_back(wall);
+            x++;
+            
+            continue;
+        }
+
         x++;
-
-        delete mapChar;
     }
 
 }
@@ -39,8 +38,7 @@ void GameLevel::Update(float deltaTime)
 
 void GameLevel::Draw()
 {
-    // ¸Ê ±×¸®±â
-    for (auto wall : walls)
+    for (auto* wall : walls)
     {
         wall->Draw();
     }
