@@ -8,7 +8,4 @@ class Pear : public DrawableActor
 
 public:
 	Pear(Vector2 position);
-
-private:
-
 };

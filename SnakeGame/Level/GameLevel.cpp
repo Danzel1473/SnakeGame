@@ -3,7 +3,7 @@
 
 GameLevel::GameLevel()
 {
-    std::string mapString =
+    const char* mapString =
         "忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖\n"
         "弛                                      弛\n"
         "弛                                      弛\n"
@@ -20,24 +20,25 @@ GameLevel::GameLevel()
         "弛                                      弛\n"
         "弛                                      弛\n"
         "弛                                      弛\n"
-        "戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎\n";
+        "戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎";
 
-    for (char mapChar : mapString)
+    for (int i = 0; i < strlen(mapString); i++)
     {
-        int x = 0;
-        int y = 0;
-        if (mapChar == ' ')
+        static int x = 0;
+        static int y = 0;
+        if (mapString[i] == ' ')
         {
             x++;
             continue;
         }
 
-        if (mapChar == '\n')
+        if (mapString[i] == '\n')
         {
             y++;
             continue;
         }
-        Wall* wall = new Wall(Vector2(x, y), (const char*)mapChar);
+
+        Wall* wall = new Wall(Vector2(x, y), (const char*)mapString[i]);
         walls.push_back(wall);
         x++;
     }
