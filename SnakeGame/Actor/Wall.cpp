@@ -1,9 +1,9 @@
 #include "Wall.h"
 
 Wall::Wall(const Vector2& position)
-	:DrawableActor("бр")
+	:DrawableActor("W")
 {
 	this->position = position;
 
-	color = Color::Green;
+	color = Color::Purple;
 }

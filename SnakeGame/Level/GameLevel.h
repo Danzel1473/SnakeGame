@@ -18,11 +18,10 @@ private:
 	bool CheckGameOver();
 
 private:
+	int score = 0;
+
 	std::vector<DrawableActor*> map;
 	std::vector<Tail*> tails;
 	std::vector<Wall*> walls;
-
 	Player* player = nullptr;
-
-
 };

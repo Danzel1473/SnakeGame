@@ -3,16 +3,28 @@
 #include "Actor/Tail.h"
 #include <vector>
 
+enum class Direction
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
 class Player : public DrawableActor
 {
 	RTTI_DECLARATIONS(Player, DrawableActor)
 
 public:
-	Player(Vector2& position);
+	Player(const Vector2& position);
+	virtual void Update(float deltaTime) override;
+
 	const float Speed() { return speed; }
+	const Direction getMoveDirection() { return moveDirection; }
 
 private:
-	float speed = 1.0f;
+	Direction moveDirection;
+	float speed = 1.2f;
 	Vector2 lastMovePos;
 	std::vector<Tail*> tail;
 };
