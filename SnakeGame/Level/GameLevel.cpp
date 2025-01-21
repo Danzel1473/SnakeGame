@@ -26,7 +26,6 @@ GameLevel::GameLevel()
     int y = 0;
 
     // 맵 해석
-    //for (int i = 0; i < strlen(mapString); i++)
     for (int i = 0; i < mapString.size(); i++)
     {
         if (mapString[i] == '\n')
@@ -46,11 +45,9 @@ GameLevel::GameLevel()
         ++x;
     }
 
-    player = new Player(Vector2((mapString.size() / 17) / 2, 8));
-
+    // 플레이어 추가
+    player = new Player(Vector2((mapString.size() / 17) / 2, 8), this);
     actors.push_back(player);
-
-    //Todo: 맵의 x, y 크기를 계산해서 저장,
 }
 
 void GameLevel::Update(float deltaTime)
@@ -61,7 +58,6 @@ void GameLevel::Update(float deltaTime)
     // actor를 전부 순회하여 랜덤으로 구한 위치에 액터가 존재하면 다시 랜덤 x,y값을 구한다.
     // 액터가 없는 위치라면 pear 객체를 그 위치에 생성한다.
 
-    // Todo:플레이어의 충돌체크. 벽이나 Tail에 충돌시 게임오버
 }
 
 void GameLevel::Draw()
@@ -73,10 +69,37 @@ void GameLevel::Draw()
     }
 
     player->Draw();
+}
 
-    Engine::Get().SetCursorPosition(0, Engine::Get().ScreenSize().y + 1);
-    Log("Score: %d", score);
-    // Todo: 액터 그리기
+bool GameLevel::SnakeCollisionCheck()
+{
+    for (auto actor : actors)
+    {
+        if (actor->As<Player>()) continue;
+
+        Vector2 nextPos = player->Position();
+        switch (player->getMoveDirection())
+        {
+        case Direction::UP:
+            ++nextPos.y;
+            break;
+        case Direction::DOWN:
+            --nextPos.y;
+        case Direction::LEFT:
+            --nextPos.x;
+            break;
+        case Direction::RIGHT:
+            ++nextPos.x;
+            break;
+        }
+        
+        if (actor->Position() == nextPos)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool GameLevel::CheckGameOver()

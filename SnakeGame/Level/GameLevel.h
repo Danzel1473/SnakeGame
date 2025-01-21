@@ -14,6 +14,8 @@ public:
 	virtual void Update(float deltaTime) override;
 	virtual void Draw() override;
 
+	bool SnakeCollisionCheck();
+
 private:
 	bool CheckGameOver();
 
@@ -23,5 +25,6 @@ private:
 	std::vector<DrawableActor*> map;
 	std::vector<Tail*> tails;
 	std::vector<Wall*> walls;
+
 	Player* player = nullptr;
 };
