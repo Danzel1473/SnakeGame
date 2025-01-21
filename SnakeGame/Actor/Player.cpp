@@ -37,28 +37,30 @@ void Player::KeyInputProcess()
 
 void Player::PlayerMove(float deltaTime)
 {
-	// 속도에 따라 타이머를 설정
-	//Timer timer(0.5f);
-	//timer.Update(deltaTime);
+	// 경과 시간 설정
 	static float elapsedTime = 0.0f;
-	elapsedTime += deltaTime;
+	// deltaTime에 따라 경과시간 증가
+	elapsedTime += deltaTime * speed;
 
-	if (elapsedTime * speed < 1) return;
+	// 경과 시간이 1이 안되면 얼리 리턴
+	if (elapsedTime  < 1) return;
 
+	// 경과 시간 초기화
 	elapsedTime = 0.0f;
 
-	Vector2 newPosition = position;
 
 	// 충돌체크
 	if (ref->SnakeCollisionCheck())
 	{
-		// Todo: 플레이어라면 게임 오버 처리
+		// 플레이어라면 게임 오버 처리
 		if (isPlayer)
 		{
 			Engine::Get().QuitGame();
 			return;
 		}
 	}
+
+	Vector2 newPosition = position;
 
 	// 이동방향에 따라 Vector2의 값 설정
 	switch (moveDirection)

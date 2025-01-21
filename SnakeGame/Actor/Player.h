@@ -29,7 +29,7 @@ public:
 
 private:
 	Direction moveDirection;
-	float speed = 1.5f;
+	float speed = 10.0f;
 	Vector2 lastMovePos;
 	std::vector<Tail*> tail;
 
