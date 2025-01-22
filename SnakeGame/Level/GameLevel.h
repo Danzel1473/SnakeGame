@@ -19,16 +19,15 @@ public:
 
 	bool DuplicationCheck(int pearX, int pearY);
 
-	bool SnakeCollisionCheck();
+	bool SnakeCollisionCheck(Actor* a, Actor* b = nullptr);
+	bool SnakeCollisionCheck(Vector2 Position);
 
 private:
 	bool CheckGameOver();
 
 private:
-	int score = 0;
 
 	std::vector<DrawableActor*> map;
-	std::vector<Tail*> tails;
 	std::vector<Wall*> walls;
 	std::vector<Pear*> pears;
 

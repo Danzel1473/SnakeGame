@@ -20,18 +20,25 @@ public:
 	Player(const Vector2& position, GameLevel* level);
 	virtual void Update(float deltaTime) override;
 
+	virtual void OnCollision(Actor* other) override;
+
 	void KeyInputProcess();
 
 	void PlayerMove(float deltaTime);
+	void SpawnTail();
+	std::vector<Tail*> GetTails();
 
 	const float Speed() { return speed; }
-	const Direction getMoveDirection() { return moveDirection; }
+	const Direction GetMoveDirection() { return moveDirection; }
 
+	std::vector<Tail*> tails;
 private:
 	Direction moveDirection;
-	float speed = 10.0f;
+	float speed = 1.5f;
 	Vector2 lastMovePos;
-	std::vector<Tail*> tail;
+
+
+	int score = 0;
 
 	GameLevel* ref = nullptr;
 	bool isPlayer = true;

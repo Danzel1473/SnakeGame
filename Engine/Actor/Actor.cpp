@@ -20,6 +20,10 @@ void Actor::Draw()
 {
 }
 
+void Actor::OnCollision(Actor* other)
+{
+}
+
 void Actor::SetPosition(const Vector2& newPosition)
 {
 	position = newPosition;

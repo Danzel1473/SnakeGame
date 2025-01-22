@@ -22,6 +22,9 @@ public:
 	virtual void Update(float delatTime);
 	virtual void Draw();
 
+	// 충돌 이벤트 함수.
+	virtual void OnCollision(Actor* other);
+
 	// Getter/Setter.
 	virtual void SetPosition(const Vector2& newPosition);
 	inline Vector2 Position() const;

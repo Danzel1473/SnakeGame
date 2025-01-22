@@ -4,10 +4,15 @@
 #include "Game/Game.h"
 #include "Level/GameLevel.h"
 
+#include "Actor/Pear.h"
+#include "Actor/Wall.h"
+
 Player::Player(const Vector2& position, GameLevel* level)
 	: DrawableActor("O"), lastMovePos(), moveDirection(Direction::DOWN), ref(level)
 {
 	this->position = position;
+	lastMovePos = position;
+	color = Color::Mint;
 }
 
 void Player::Update(float deltaTime)
@@ -16,6 +21,36 @@ void Player::Update(float deltaTime)
 
 	KeyInputProcess();
 	PlayerMove(deltaTime);
+}
+
+void Player::OnCollision(Actor* other)
+{
+	Super::OnCollision(other);
+
+	// 여기서 충돌 처리.
+	if (other->As<Pear>())
+	{
+		// 점수 증가
+		score += dynamic_cast<Pear*>(other)->GetScore();
+
+		// 배 제거.
+		other->Destroy();
+
+		// 꼬리 생성
+		SpawnTail();
+
+		// 스피드 증가
+		speed *= 1.1;
+		
+		return;
+	}
+
+	// 충돌한 물체가 벽이면 게임 종료.
+	if (other->As<Wall>())
+	{
+		Engine::Get().QuitGame();
+		return;
+	}
 }
 
 void Player::KeyInputProcess()
@@ -48,21 +83,9 @@ void Player::PlayerMove(float deltaTime)
 	// 경과 시간 초기화
 	elapsedTime = 0.0f;
 
-
-	// 충돌체크
-	if (ref->SnakeCollisionCheck())
-	{
-		// 플레이어라면 게임 오버 처리
-		if (isPlayer)
-		{
-			Engine::Get().QuitGame();
-			return;
-		}
-	}
-
 	Vector2 newPosition = position;
 
-	// 이동방향에 따라 Vector2의 값 설정
+	// 이동방향에 따라 Vector2의 값 설정, Tail이 있다면 테일도 플레이어를 따라 이동해야함
 	switch (moveDirection)
 	{
 	case Direction::UP:
@@ -77,11 +100,57 @@ void Player::PlayerMove(float deltaTime)
 	case Direction::RIGHT:
 		newPosition.x = ++position.x;
 		break;
-	default:
-		break;
 	}
 
+	// 충돌체크.
+	ref->SnakeCollisionCheck(newPosition);
+
+	// 이전 위치 저장
+	lastMovePos = position;
 	// 새로운 위치로 적용
 	position = newPosition;
+
+	if (tails.size() > 0)
+	{
+		// 꼬리의 이동 루프
+		for (int i = 0; i < tails.size(); ++i)
+		{
+			tails[i]->SetLastMovePosition(tails[i]->GetPosition());
+		
+			if (i == 0)
+			{
+				tails[i]->SetPosition(lastMovePos);
+				break;
+			}
+		
+			tails[i]->SetPosition(tails[i - 1]->GetLastMovePosition());
+
+		}
+	}
 }
+
+void Player::SpawnTail()
+{
+	Tail* tail;
+
+	if (tails.size() < 1)
+	{
+		tail = new Tail(lastMovePos);
+	}
+	else
+	{
+		Vector2 pos = tails.back()->GetLastMovePosition();
+		tail = new Tail(pos);
+	}
+
+	tails.push_back(tail);
+	ref->AddActor(tail);
+}
+
+std::vector<Tail*> Player::GetTails()
+{
+	return tails;
+}
+
+
 

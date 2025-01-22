@@ -46,7 +46,7 @@ GameLevel::GameLevel()
     }
 
     // 플레이어 추가
-    player = new Player(Vector2((mapString.size() / 17) / 2, 8), this);
+    player = new Player(Vector2(((int)mapString.size() / 17) / 2, 8), this);
     actors.push_back(player);
 }
 
@@ -54,27 +54,55 @@ void GameLevel::Update(float deltaTime)
 {
     Super::Update(deltaTime);
 
+    // 주기적으로 배(과일) 생성
     SpawnPear(deltaTime);
-
-    // Todo: 주기적으로 맵의 x, y값에 따른 random값을 2개 구하고
-    // actor를 전부 순회하여 랜덤으로 구한 위치에 액터가 존재하면 다시 랜덤 x,y값을 구한다.
-    // 액터가 없는 위치라면 pear 객체를 그 위치에 생성한다.
 
 }
 
 void GameLevel::Draw()
 {
+    player->tails.clear();
+    for (auto* actor : actors)
+    {
+        auto* tail = actor->As<Tail>();
+        if (tail)
+        {
+            player->tails.emplace_back(tail);
+        }
+    }
     // 벽 그리기
     for (auto* wall : walls)
     {
         wall->Draw();
     }
 
-    if (pears.size() != 0)
+    // 배 그리기.
+    pears.clear();
+    for (auto* actor : actors)
+    {
+        auto* pear = actor->As<Pear>();
+        if (pear)
+        {
+            pears.emplace_back(pear);
+        }
+    }
+
+    if (pears.size() > 0)
     {
         for (auto* pear : pears)
         {
             pear->Draw();
+        }
+    }
+    pears.clear();
+
+
+
+    if (player->GetTails().size() > 0)
+    {
+        for (auto* tail : player->GetTails())
+        {
+            tail->Draw();
         }
     }
 
@@ -98,8 +126,8 @@ void GameLevel::SpawnPear(float deltaTime)
 
     while (true)
     {
-        pearX = RandomPercent(1.0f, 24.0f);
-        pearY = RandomPercent(1.0f, 16.0f);
+        pearX = (int)RandomPercent(1.0f, 24.0f);
+        pearY = (int)RandomPercent(1.0f, 16.0f);
 
         if (DuplicationCheck(pearX, pearY))
         {
@@ -111,15 +139,14 @@ void GameLevel::SpawnPear(float deltaTime)
 
     // 배 생성
     Pear* pear = new Pear(Vector2(pearX, pearY));
-    pears.push_back(pear);
     actors.push_back(pear);
 }
 
-bool GameLevel::DuplicationCheck(int pearX, int pearY)
+bool GameLevel::DuplicationCheck(int x, int y)
 {
     for (auto actor : actors)
     {
-        if (actor->Position().x == pearX && actor->Position().y == pearY)
+        if (actor->Position().x == x && actor->Position().y == y)
         {
             return true;
         }
@@ -127,31 +154,17 @@ bool GameLevel::DuplicationCheck(int pearX, int pearY)
     return false;
 }
 
-bool GameLevel::SnakeCollisionCheck()
+bool GameLevel::SnakeCollisionCheck(Vector2 position)
 {
+    // 플레이어를 기준으로 충돌 처리.
     for (auto actor : actors)
     {
         if (actor->As<Player>()) continue;
 
-        Vector2 nextPos = player->Position();
-        switch (player->getMoveDirection())
+        if (actor->Position() == position)
         {
-        case Direction::UP:
-            ++nextPos.y;
-            break;
-        case Direction::DOWN:
-            --nextPos.y;
-        case Direction::LEFT:
-            --nextPos.x;
-            break;
-        case Direction::RIGHT:
-            ++nextPos.x;
-            break;
-        }
-        
-        if (actor->Position() == nextPos)
-        {
-            return true;
+            player->OnCollision(actor);
+            return false;
         }
     }
 

@@ -8,4 +8,9 @@ class Pear : public DrawableActor
 
 public:
 	Pear(Vector2 position);
+
+	int GetScore() { return score; }
+
+private:
+	int score = 10;
 };

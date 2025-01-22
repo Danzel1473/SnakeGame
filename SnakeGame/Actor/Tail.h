@@ -6,9 +6,15 @@ class Tail : public DrawableActor
 	RTTI_DECLARATIONS(Tail, DrawableActor)
 
 public:
-	Tail(Vector2* position);
-	void SetPosition(Vector2* position);
+	Tail(const Vector2& position);
+
+	Vector2 GetPosition();
+	Vector2 GetLastMovePosition();
+
+	void SetPosition(const Vector2& position);
+	void SetLastMovePosition(const Vector2& position);
 
 private:
-	Vector2* position;
+	Vector2 position;
+	Vector2 lastMovePosition;
 };

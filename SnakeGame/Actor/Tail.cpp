@@ -1,12 +1,28 @@
 #include "Tail.h"
 
-Tail::Tail(Vector2* position)
+Tail::Tail(const Vector2& position)
 	:DrawableActor("o")
+{
+	this->position = position;
+	lastMovePosition = position;
+}
+
+void Tail::SetPosition(const Vector2& position)
 {
 	this->position = position;
 }
 
-void Tail::SetPosition(Vector2* position)
+Vector2 Tail::GetPosition()
 {
-	this->position = position;
+	return position;
+}
+
+Vector2 Tail::GetLastMovePosition()
+{
+	return lastMovePosition;
+}
+
+void Tail::SetLastMovePosition(const Vector2& position)
+{
+	lastMovePosition = position;
 }
