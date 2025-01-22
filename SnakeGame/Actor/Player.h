@@ -8,7 +8,8 @@ enum class Direction
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	NONE
 };
 
 class GameLevel;
@@ -28,13 +29,15 @@ public:
 	void SpawnTail();
 	std::vector<Tail*> GetTails();
 
+	const int Score() { return score; }
 	const float Speed() { return speed; }
 	const Direction GetMoveDirection() { return moveDirection; }
 
 	std::vector<Tail*> tails;
 private:
 	Direction moveDirection;
-	float speed = 1.5f;
+	Direction lastDirection = Direction::NONE;
+	float speed = 2.0f;
 	Vector2 lastMovePos;
 
 

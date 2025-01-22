@@ -107,6 +107,12 @@ void GameLevel::Draw()
     }
 
     player->Draw();
+
+    char buffer[24];
+    sprintf_s(buffer, "Score: %d", player->Score());
+    const char* scoreString = buffer;
+
+    Engine::Get().Draw(Vector2(0, 17), scoreString);
 }
 
 void GameLevel::SpawnPear(float deltaTime)

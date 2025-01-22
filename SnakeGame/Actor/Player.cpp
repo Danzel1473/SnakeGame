@@ -35,20 +35,23 @@ void Player::OnCollision(Actor* other)
 
 		// 배 제거.
 		other->Destroy();
-
+		
 		// 꼬리 생성
 		SpawnTail();
 
 		// 스피드 증가
 		speed *= 1.1;
-		
+
 		return;
 	}
 
-	// 충돌한 물체가 벽이면 게임 종료.
-	if (other->As<Wall>())
+	// 충돌한 물체가 벽이나 꼬리면 게임 종료.
+	if (other->As<Wall>() || other->As<Tail>())
 	{
-		Engine::Get().QuitGame();
+		//게임 재시작
+		Game::Get().LoadLevel(new GameLevel());
+		Game::Get().Run();
+
 		return;
 	}
 }
@@ -64,10 +67,24 @@ void Player::KeyInputProcess()
 	}
 
 	// 입력에 따라 이동방향 설정
-	if (Engine::Get().GetKeyDown(VK_UP)) moveDirection = Direction::UP;
-	if (Engine::Get().GetKeyDown(VK_DOWN)) moveDirection = Direction::DOWN;
-	if (Engine::Get().GetKeyDown(VK_LEFT)) moveDirection = Direction::LEFT;
-	if (Engine::Get().GetKeyDown(VK_RIGHT)) moveDirection = Direction::RIGHT;
+	if (tails.size() > 0)
+	{
+		if (Engine::Get().GetKeyDown(VK_UP) && lastDirection != Direction::DOWN)
+			moveDirection = Direction::UP;
+		if (Engine::Get().GetKeyDown(VK_DOWN) && lastDirection != Direction::UP)
+			moveDirection = Direction::DOWN;
+		if (Engine::Get().GetKeyDown(VK_LEFT) && lastDirection != Direction::RIGHT)
+			moveDirection = Direction::LEFT;
+		if (Engine::Get().GetKeyDown(VK_RIGHT) && lastDirection != Direction::LEFT)
+			moveDirection = Direction::RIGHT;
+	}
+	else
+	{
+		if (Engine::Get().GetKeyDown(VK_UP)) moveDirection = Direction::UP;
+		if (Engine::Get().GetKeyDown(VK_DOWN)) moveDirection = Direction::DOWN; 
+		if (Engine::Get().GetKeyDown(VK_LEFT)) moveDirection = Direction::LEFT;
+		if (Engine::Get().GetKeyDown(VK_RIGHT)) moveDirection = Direction::RIGHT;
+	}
 }
 
 void Player::PlayerMove(float deltaTime)
@@ -102,14 +119,7 @@ void Player::PlayerMove(float deltaTime)
 		break;
 	}
 
-	// 충돌체크.
-	ref->SnakeCollisionCheck(newPosition);
-
-	// 이전 위치 저장
-	lastMovePos = position;
-	// 새로운 위치로 적용
-	position = newPosition;
-
+	// 꼬리가 없으면 시행하지 않음
 	if (tails.size() > 0)
 	{
 		// 꼬리의 이동 루프
@@ -120,27 +130,36 @@ void Player::PlayerMove(float deltaTime)
 			if (i == 0)
 			{
 				tails[i]->SetPosition(lastMovePos);
-				break;
+				continue;
 			}
 		
 			tails[i]->SetPosition(tails[i - 1]->GetLastMovePosition());
 
 		}
 	}
+
+	// 충돌체크.
+	ref->SnakeCollisionCheck(newPosition);
+
+	// 이전 위치 저장
+	lastMovePos = position;
+	lastDirection = moveDirection;
+	// 새로운 위치로 적용
+	position = newPosition;
 }
 
 void Player::SpawnTail()
 {
 	Tail* tail;
 
-	if (tails.size() < 1)
-	{
-		tail = new Tail(lastMovePos);
-	}
-	else
+	if (tails.size() > 0)
 	{
 		Vector2 pos = tails.back()->GetLastMovePosition();
 		tail = new Tail(pos);
+	}
+	else
+	{
+		tail = new Tail(lastMovePos);
 	}
 
 	tails.push_back(tail);

@@ -15,6 +15,5 @@ public:
 	void SetLastMovePosition(const Vector2& position);
 
 private:
-	Vector2 position;
 	Vector2 lastMovePosition;
 };

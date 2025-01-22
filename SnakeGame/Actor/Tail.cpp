@@ -5,6 +5,8 @@ Tail::Tail(const Vector2& position)
 {
 	this->position = position;
 	lastMovePosition = position;
+
+	color = Color::Mint;
 }
 
 void Tail::SetPosition(const Vector2& position)
